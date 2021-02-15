@@ -41,6 +41,7 @@ void TimeManager::start() {
 float TimeManager::getTime() {
     return (millis() - timeStart) / 1000.0;
 }
+
 class DisplayManager {
     public:
         void setup();
