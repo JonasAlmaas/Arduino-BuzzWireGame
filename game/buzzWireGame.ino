@@ -254,10 +254,12 @@ void GameManager::resetGame() {
     digitalWrite(pinManager.getPinBuzzer(), 0);
 }
 
-void setup() {
+GameManager gameManager;
 
+void setup() {
+    gameManager.setup();
 }
 
 void loop() {
-    
+    gameManager.think();
 }
