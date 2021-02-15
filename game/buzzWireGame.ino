@@ -257,6 +257,7 @@ void GameManager::resetGame() {
 GameManager gameManager;
 
 void setup() {
+    pinMode(gameManager.pinManager.getPinBuzzer(), OUTPUT);
     gameManager.setup();
 }
 
