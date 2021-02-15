@@ -113,6 +113,57 @@ void DisplayManager::displayScoreScreen(float score, float bestScore) {
     lcd.print(bestScore);
 }
 
+class ScoreManager {
+    public:
+        int getTouchCount();
+        float getLatestScore();
+        float getBestScore();
+        void addTouch();
+        void resetTouchCount();
+        void setLatestScore(float value);
+        void updateBestScore();
+        ScoreManager();
+    private:
+        float latestScore;
+        float bestScore;
+        int touchCount;
+        float touchPenalty;
+        int maxTouchesPerSecond;
+        float lastTouchTime;
+};
+
+ScoreManager::ScoreManager() {
+    latestScore = 0;
+    bestScore = 999;
+    touchCount = 0;
+    touchPenalty = 1.5;
+    maxTouchesPerSecond = 10;
+}
+int ScoreManager::getTouchCount() {return touchCount;}
+float ScoreManager::getLatestScore() {return latestScore;}
+float ScoreManager::getBestScore() {return bestScore;}
+void ScoreManager::addTouch() {
+    if ((millis() / 1000.0) - lastTouchTime >  1.0 / 4.0) {
+        float timeDifference = (millis() / 1000.0) - lastTouchTime;
+
+        if (timeDifference > 1.0 / maxTouchesPerSecond) {
+            lastTouchTime = millis() / 1000.0;
+            touchCount += 1;
+        }
+    }
+}
+void ScoreManager::resetTouchCount() {
+    touchCount = 0;
+}
+void ScoreManager::setLatestScore(float time) {
+    latestScore = time + (float)touchCount * touchPenalty;
+}
+void ScoreManager::updateBestScore() {
+    if (latestScore < bestScore) {
+        bestScore = latestScore;
+    }
+}
+
 void setup() {
 
 }
