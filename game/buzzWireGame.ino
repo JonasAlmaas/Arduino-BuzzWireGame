@@ -164,6 +164,96 @@ void ScoreManager::updateBestScore() {
     }
 }
 
+class GameManager {
+    public:
+        PinManager pinManager;
+        DisplayManager displayManager;
+        TimeManager timeManager;
+        ScoreManager scoreManager;
+        void setup();
+        void think();
+        GameManager();
+    private:
+        void checkForTouch();
+        void checkForStart();
+        void checkForEnd();
+        void resetGame();
+        bool isRunning;
+        int lastSignalTouch;
+        int lastSignalStart;
+};
+
+GameManager::GameManager() {
+    pinManager = PinManager();
+    displayManager = DisplayManager();
+    timeManager = TimeManager();
+    scoreManager = ScoreManager();
+    isRunning = false;
+}
+// Taking care of everything that can't be initialized right away
+void GameManager::setup() {
+    displayManager.setup();
+    resetGame();
+}
+void GameManager::think() {
+    checkForStart();
+
+    if (isRunning) {
+        displayManager.displayLiveScore(timeManager.getTime(), scoreManager.getTouchCount());
+        checkForTouch();
+        checkForEnd();
+    }
+}
+void GameManager::checkForTouch() {
+    int signal = digitalRead(pinManager.getPinTouch());
+
+    if (signal != lastSignalTouch) {
+        lastSignalTouch = signal;
+        
+        if (signal) {
+            digitalWrite(pinManager.getPinBuzzer(), 1);
+            displayManager.setBackgroundColourRed();
+        } else {
+            digitalWrite(pinManager.getPinBuzzer(), 0);
+            displayManager.setBackgroundColourWhite();
+        }
+    } else {
+        if (signal) {
+            scoreManager.addTouch();
+        }
+    }
+}
+void GameManager::checkForStart() {
+    int signal = digitalRead(pinManager.getPinStart());
+
+    if (signal != lastSignalStart) {
+        lastSignalStart = signal;
+
+        if (!signal) {
+            isRunning = true;
+            timeManager.start();
+        } else {
+            resetGame();
+        }
+    }
+}
+void GameManager::checkForEnd() {
+    int signal = digitalRead(pinManager.getPinEnd());
+
+    if (signal) {
+        scoreManager.setLatestScore(timeManager.getTime());
+        scoreManager.updateBestScore();
+        resetGame();
+    }
+}
+void GameManager::resetGame() {
+    isRunning = false;
+    scoreManager.resetTouchCount();
+    displayManager.displayScoreScreen(scoreManager.getLatestScore(), scoreManager.getBestScore());
+    displayManager.setBackgroundColourWhite();
+    digitalWrite(pinManager.getPinBuzzer(), 0);
+}
+
 void setup() {
 
 }
