@@ -25,6 +25,23 @@ int PinManager::getPinStart() {return Start;}
 int PinManager::getPinEnd() {return End;}
 int PinManager::getPinBuzzer() {return Buzzer;}
 
+class TimeManager {
+    public:
+        void start();
+        float getTime();
+        TimeManager();
+    private:
+        float timeStart;
+};
+TimeManager::TimeManager() {}
+void TimeManager::start() {
+    timeStart = millis();
+}
+// Return length of the current game in seconds
+float TimeManager::getTime() {
+    return (millis() - timeStart) / 1000.0;
+}
+
 void setup() {
 
 }
