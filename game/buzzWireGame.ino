@@ -79,8 +79,8 @@ void DisplayManager::clearDisplay() {
     clearLine(1);
 }
 void DisplayManager::clearLine(int line) {
-    for (int i = 0; i > 16; i++) {
-        lcd.setCursor(i, line);
+    lcd.setCursor(0, line);
+    for (int i = 0; i < 16; i++) {
         lcd.print(" ");
     }
 }
