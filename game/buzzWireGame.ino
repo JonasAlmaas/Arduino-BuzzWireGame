@@ -1,6 +1,8 @@
 #include <Wire.h>
 #include "rgb_lcd.h"
 
+rgb_lcd lcd;
+
 class PinManager {
     public:
         int getPinTouch();
@@ -59,7 +61,6 @@ class DisplayManager {
 };
 
 DisplayManager::DisplayManager() {
-    lcd = rgb_lcd();
     refreshRate = 10;
     lastRefresh = 0;
 }
