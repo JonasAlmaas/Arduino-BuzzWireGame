@@ -60,7 +60,7 @@ class DisplayManager {
 };
 
 DisplayManager::DisplayManager() {
-    refreshRate = 10;
+    refreshRate = 5;
     lastRefresh = 0;
 }
 // This needs to be called in the setup, therefor it can't be in the constructor
