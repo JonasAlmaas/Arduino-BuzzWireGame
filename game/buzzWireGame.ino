@@ -55,7 +55,6 @@ class DisplayManager {
     private:
         void clearDisplay();
         void clearLine(int line);
-        rgb_lcd lcd;
         float refreshRate;
         float lastRefresh;
 };
@@ -67,13 +66,6 @@ DisplayManager::DisplayManager() {
 // This needs to be called in the setup, therefor it can't be in the constructor
 void DisplayManager::setup() {
     lcd.begin(16, 2);
-    // This is just dumb, but staying
-    lcd.setRGB(0, 255, 0);
-    lcd.print("LOADING...");
-    delay(1000);
-    lcd.setCursor(0, 1);
-    lcd.print("Not realy though");
-    delay(1000);
 }
 void DisplayManager::setBackgroundColourWhite() {
     lcd.setRGB(200, 200, 255);
